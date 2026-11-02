@@ -1,21 +1,17 @@
-The first playable release of **Emberfall — The Last Light**, an offline fantasy action RPG.
+**Emberfall 1.1.0 — Your strike. Your story.**
 
-## Download and play
+## What changed
 
-Download **Emberfall-1.0.0-Windows.exe** from the assets below and double-click it. Requires Windows 10/11, 64-bit. No installation or administrator access is required. Allow a few seconds for the portable launcher to unpack.
+- **Manual combat:** aim with the mouse and click for each attack, or press J. No automatic targeting, idle attacks, or held autofire. Astral echoes now empower manual attacks instead of damaging enemies on their own.
+- **Earned moves:** each class learns Q at 12 class defeats, R at 60, and F at 180 plus 3 class bosses. Nine distinct class moves include shields, blinking, movement boosts, whirling cleaves, explosions, and arrowstorms. The new Moves tab shows requirements and progress.
+- **26 unique quests:** a story journal replaces the repeating counters. Meet the scout, apothecary, captain, archivist, and smith through gathering, escorting, investigation, beacon defense, rituals, crafting, equipment, hunting, mastery, and boss challenges. Rewards are claimed once and completed quests stay completed.
+- **World objectives:** hold X to gather moonleaf, speak to a scout and guide them to the campfire, examine the old watchtower, ignite and defend a beacon, or seal rifts. An objective compass and interaction hints guide you.
+- **Existing saves migrate:** keep your gold, shards, equipment, sanctuary upgrades, and combat mastery. The new story journal begins fresh. Learned moves and completed objectives persist across runs and ascensions.
 
-## In this release
+## Download and controls
 
-- Three classes: Warden, Arcanist, and Ranger, each with their own attack and spell.
-- Animated combat, dashes, spell effects, synthesized audio, and telegraphed boss attacks.
-- Endless expeditions across three unlockable regions, with bosses every five waves.
-- Five equipment rarities, gear enhancement, stackable run blessings, repeatable quests, sanctuary upgrades, and ascension.
-- Automatic local saves with export/import backups.
+Download **Emberfall-1.1.0-Windows.exe** below. Requires Windows 10/11, 64-bit. No installation is required. Saves use the same location as 1.0; export a backup before updating.
 
-**Controls:** WASD / arrows to move, Space to dash, Q for spells, E for a potion, Escape to pause, F11 for fullscreen. Attacks are automatic.
+**WASD / arrows:** move · **Left click / J:** attack · **Space:** dash · **Q / R / F:** learned moves · **E:** potion · **Hold X:** interact · **Escape:** pause · **F11:** fullscreen.
 
-## Validation and limitations
-
-Progression tests, Chromium integration tests, Linux Electron startup, and an accelerated simulation through wave 24 passed. Native Windows gameplay has not yet been manually verified. The executable is unsigned. The SHA-256 file is included for download verification.
-
-This is a first playable version. Save data is stored locally; export a backup before moving to another computer.
+The executable is unsigned. Automated progression and browser checks cover the changed systems; Windows gameplay has not been manually verified. A SHA-256 checksum accompanies the executable.

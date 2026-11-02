@@ -1,6 +1,6 @@
 {
   "name": "emberfall",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Emberfall \u2014 an offline fantasy action RPG with expeditions, loot and lasting progression.",
   "author": "Skysverse",
   "license": "MIT",
@@ -37,7 +37,7 @@
       "signAndEditExecutable": false
     },
     "portable": {
-      "artifactName": "Emberfall-1.0.0-Windows.exe",
+      "artifactName": "Emberfall-${version}-Windows.exe",
       "requestExecutionLevel": "user"
     }
   },
