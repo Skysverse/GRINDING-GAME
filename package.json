@@ -1,0 +1,45 @@
+{
+  "name": "emberfall",
+  "version": "1.0.0",
+  "description": "Emberfall \u2014 an offline fantasy action RPG with expeditions, loot and lasting progression.",
+  "author": "Skysverse",
+  "license": "MIT",
+  "main": "electron.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "python3 -m http.server 5173 --bind 127.0.0.1",
+    "test": "node --test tests/core.test.mjs",
+    "test:ui": "node tests/ui.cjs",
+    "dist:win": "electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "45.2.1",
+    "electron-builder": "26.18.0",
+    "playwright-core": "1.58.2"
+  },
+  "build": {
+    "appId": "com.skysverse.emberfall",
+    "productName": "Emberfall",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "src/**/*",
+      "electron.cjs",
+      "package.json",
+      "LICENSE"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "Emberfall-1.0.0-Windows.exe",
+      "requestExecutionLevel": "user"
+    }
+  },
+  "type": "module"
+}

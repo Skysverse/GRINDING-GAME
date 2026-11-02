@@ -1,0 +1,42 @@
+name: Build and release Emberfall
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    name: Windows portable executable
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Test progression and saves
+        run: npm test
+      - name: Build Windows portable executable
+        run: npm run dist:win -- --publish never
+      - name: Publish executable and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json | ConvertFrom-Json).version
+          if ($env:RELEASE_TAG -ne "v$version") { throw "Tag must match package.json version" }
+          $exe = "dist/Emberfall-$version-Windows.exe"
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  Emberfall-$version-Windows.exe" | Set-Content "$exe.sha256" -Encoding ascii
+          gh release create $env:RELEASE_TAG $exe "$exe.sha256" --verify-tag --title "Emberfall $env:RELEASE_TAG" --notes-file RELEASE_NOTES.md
+          if ($LASTEXITCODE -ne 0) { throw "Release publication failed" }

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'"><title>Emberfall</title><link rel="stylesheet" href="src/style.css"></head>
+<body>
+<canvas id="world" aria-label="Fantasy expedition arena"></canvas>
+<div class="vignette"></div>
+<header id="topbar"><a class="brand" href="#">✦ <span>EMBERFALL</span><small>THE LAST LIGHT</small></a><div id="wallet"></div><button id="sound" class="icon-button" aria-label="Toggle sound">♫ Sound off</button></header>
+<main id="town">
+  <section class="intro"><div class="eyebrow"><i></i> A WORLD BEYOND THE ASH</div><h1>Keep the<br><em>ember alive.</em></h1><p>The old kingdoms fell. Your story is still being forged.<br>Venture into the wilds. Find your power. Return stronger.</p><div id="record" class="record"></div></section>
+  <section class="camp panel"><div class="tabs"><button data-tab="journey" class="active">Expeditions</button><button data-tab="gear">Equipment</button><button data-tab="forge">Sanctuary</button><button data-tab="quests">Quests</button></div><div id="tab-content"></div></section>
+  <footer><span>OFFLINE ADVENTURE <b>◆</b> PROGRESS SAVES AUTOMATICALLY</span><button id="guide-open">How to play ↗</button><button id="export-save">Export save</button><label class="import">Import save<input id="import-save" type="file" accept="application/json,.json" hidden></label></footer>
+</main>
+<section id="hud" hidden><div class="hero-status panel"><div class="eyebrow" id="hero-name"></div><div class="health-track"><div id="health-fill"></div><span id="health-text"></span></div><div class="xp-track"><div id="xp-fill"></div></div><div id="run-level"></div></div><div class="wave-status panel"><span id="biome-name"></span><h2 id="wave-text"></h2><div id="wave-sub"></div></div><button id="pause-button" class="panel">Ⅱ Pause</button><div id="boss-hud" class="panel" hidden><span id="boss-name"></span><div class="health-track"><div id="boss-fill"></div></div></div><div id="ability-bar" class="panel"></div><div class="run-hint">WASD / ARROWS move <b>·</b> AUTO ATTACK <b>·</b> SPACE dash <b>·</b> Q spell <b>·</b> E potion</div></section>
+<div id="modal" hidden><div class="modal-content panel" id="modal-body"></div></div>
+<div id="toast" role="status"></div>
+<script type="module" src="src/game.js"></script>
+</body></html>
