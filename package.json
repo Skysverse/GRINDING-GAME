@@ -1,7 +1,7 @@
 {
   "name": "emberfall",
-  "version": "1.1.0",
-  "description": "Emberfall \u2014 an offline fantasy action RPG with expeditions, loot and lasting progression.",
+  "version": "2.0.0",
+  "description": "Emberfall: The Open Wilds — a third-person 3D open-world RPG with class questlines and earned weapons.",
   "author": "Skysverse",
   "license": "MIT",
   "main": "electron.cjs",
@@ -10,7 +10,12 @@
     "dev": "python3 -m http.server 5173 --bind 127.0.0.1",
     "test": "node --test tests/core.test.mjs",
     "test:ui": "node tests/ui.cjs",
-    "dist:win": "electron-builder --win portable --x64"
+    "dist:win": "electron-builder --win portable --x64",
+    "postinstall": "node scripts/vendor.cjs",
+    "prestart": "node scripts/vendor.cjs",
+    "predev": "node scripts/vendor.cjs",
+    "pretest:ui": "node scripts/vendor.cjs",
+    "predist:win": "node scripts/vendor.cjs"
   },
   "devDependencies": {
     "electron": "45.2.1",
@@ -41,5 +46,8 @@
       "requestExecutionLevel": "user"
     }
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "three": "0.187.0"
+  }
 }

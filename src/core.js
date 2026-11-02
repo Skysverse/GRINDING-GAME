@@ -1,52 +1,33 @@
-import {METRICS,QUESTS} from './progression.js';
-export {questInfo,claimQuest} from './progression.js';
-export const CLASSES = [
- {id:'warden',name:'Warden',icon:'⚔',desc:'Resilient · cleaving blade',hp:140,damage:20,rate:.65,speed:210,color:'#e8c489',spell:'Earthshatter'},
- {id:'arcanist',name:'Arcanist',icon:'✧',desc:'Arcane · piercing bolts',hp:90,damage:27,rate:.8,speed:220,color:'#bfa4fa',spell:'Starfall'},
- {id:'ranger',name:'Ranger',icon:'➶',desc:'Agile · rapid arrows',hp:105,damage:15,rate:.36,speed:250,color:'#91dfb2',spell:'Thorn volley'}
-];
-export const REGIONS=[
- {name:'The Whispering Wilds',icon:'♧',desc:'Ancient woods. Restless spirits.',color:'#7cc6a0',ground:'#101f21',gate:0,mult:1},
- {name:'Cinderstone Ruins',icon:'♜',desc:'A fallen kingdom beneath the ash.',color:'#e2a074',ground:'#25201e',gate:5,mult:1.65},
- {name:'The Astral Hollow',icon:'✧',desc:'Where the veil between worlds thins.',color:'#b1a1ef',ground:'#1a1930',gate:10,mult:2.7}
-];
-export const RARITIES=['Common','Uncommon','Rare','Epic','Legendary'];
-export const SLOTS=['weapon','armor','charm'];
-export const ICONS={weapon:'⚔',armor:'◈',charm:'✧'};
-export const UPGRADES=[
- {id:'power',name:'Ember blade',desc:'+6% base damage per rank',icon:'⚔'},
- {id:'vitality',name:'Heartwood',desc:'+12 maximum health per rank',icon:'♡'},
- {id:'fortune',name:'Fortune’s favor',desc:'+3% rare loot chance per rank (max 10)',icon:'✧'},
- {id:'haste',name:'Windwalker',desc:'+2% speed & attack speed per rank (max 20)',icon:'➶'}
-];
-export function freshSave(){return {version:2,metrics:Object.fromEntries(METRICS.map(k=>[k,0])),mastery:Object.fromEntries(CLASSES.map(c=>[c.id,{kills:0,bosses:0}])),completedQuests:[],worldDone:[],gold:0,shards:0,embers:0,ascensions:0,kills:0,bosses:0,runs:0,bestWave:0,totalLevels:0,upgrades:{power:0,vitality:0,fortune:0,haste:0},equipped:{weapon:null,armor:null,charm:null},inventory:[],classId:'warden',region:0,sound:false};}
+import {CLASSES,WEAPONS,QUESTS,OBJECTS,SKILLS} from './data.js';
+const cap=(n,max=1e9)=>Math.min(max,Math.max(0,Math.floor(Number(n)||0)));
+export function createSave(classId){
+ if(!CLASSES.some(c=>c.id===classId))throw Error('Choose a valid class.');
+ return {version:3,classId,level:1,xp:0,gold:0,kills:0,deaths:0,metrics:{},completed:[],collected:[],unlocked:[classId+'-0'],equipped:classId+'-0',position:{x:0,z:18},bosses:{stonewarden:0,ashking:0,starless:0},sound:false};
+}
 export function normalizeSave(raw){
- if(!raw || ![1,2].includes(raw.version)) throw Error('This is not an Emberfall save.');
- const s=freshSave();
- for(const k of ['gold','shards','embers','ascensions','kills','bosses','runs','bestWave','totalLevels'])s[k]=Math.min(1e12,Math.max(0,Math.floor(Number(raw[k])||0)));
- for(const u of UPGRADES)s.upgrades[u.id]=Math.min(u.id==='fortune'?10:u.id==='haste'?20:1000,Math.max(0,Math.floor(Number(raw.upgrades?.[u.id])||0)));
- for(const k of METRICS)s.metrics[k]=Math.min(1e12,Math.max(0,Math.floor(Number(raw.metrics?.[k])||0)));
- for(const c of CLASSES)for(const k of ['kills','bosses'])s.mastery[c.id][k]=Math.min(1e12,Math.max(0,Math.floor(Number(raw.mastery?.[c.id]?.[k])||0)));
- s.completedQuests=Array.isArray(raw.completedQuests)?[...new Set(raw.completedQuests.filter(id=>QUESTS.some(q=>q.id===id)))]:[];
- s.worldDone=Array.isArray(raw.worldDone)?[...new Set(raw.worldDone.filter(x=>typeof x==='string'&&x.length<50))].slice(0,100):[];
- // A legacy adventure keeps its earned combat mastery in the last selected class.
- if(raw.version===1){const id=CLASSES.some(c=>c.id===raw.classId)?raw.classId:'warden';s.mastery[id]={kills:s.kills,bosses:s.bosses};}
- const item=i=>i && SLOTS.includes(i.slot) && Number.isInteger(i.rarity) && i.rarity>=0&&i.rarity<5 && Number.isFinite(i.power)&&i.power>0 ? {id:String(i.id).slice(0,60),slot:i.slot,rarity:i.rarity,power:Math.min(1e7,i.power),name:String(i.name).slice(0,70)}:null;
- s.inventory=Array.isArray(raw.inventory)?raw.inventory.map(item).filter(Boolean).slice(0,60):[];
- for(const slot of SLOTS){let i=item(raw.equipped?.[slot]);s.equipped[slot]=i?.slot===slot?i:null;}
- if(CLASSES.some(c=>c.id===raw.classId))s.classId=raw.classId;
- s.region=Math.min(2,Math.max(0,Math.floor(Number(raw.region)||0)));if(s.bestWave<REGIONS[s.region].gate)s.region=0;
+ if(!raw||raw.version!==3)throw Error('This save belongs to a different game version.');
+ const s=createSave(raw.classId);for(const k of ['level','xp','gold','kills','deaths'])s[k]=cap(raw[k]);s.level=Math.max(1,Math.min(100,s.level));
+ for(const [key,value] of Object.entries(raw.metrics||{}).slice(0,100))if(/^[A-Za-z0-9-]{1,40}$/.test(key))s.metrics[key]=cap(value);
+ // Only retain a contiguous chain, so an edited/corrupt save cannot strand the story.
+ s.completed=[];for(const q of QUESTS[s.classId]){if(!Array.isArray(raw.completed)||!raw.completed.includes(q.id))break;s.completed.push(q.id);}
+ s.collected=[...new Set(Array.isArray(raw.collected)?raw.collected.filter(id=>OBJECTS.some(o=>o.id===id)):[])];
+ s.unlocked=[s.classId+'-0',...QUESTS[s.classId].filter(q=>s.completed.includes(q.id)&&q.weapon!==null).map(q=>WEAPONS[s.classId][q.weapon].id)];
+ if(s.unlocked.includes(raw.equipped))s.equipped=raw.equipped;
+ for(const id of ['stonewarden','ashking','starless'])s.bosses[id]=cap(raw.bosses?.[id]);
+ if(Number.isFinite(raw.position?.x)&&Number.isFinite(raw.position?.z)&&Math.hypot(raw.position.x,raw.position.z)<235)s.position={x:raw.position.x,z:raw.position.z};
  s.sound=raw.sound===true;return s;
 }
-export function upgradeCost(level){return Math.floor(55*Math.pow(1.38,level));}
-export function stats(s){const c=CLASSES.find(c=>c.id===s.classId)||CLASSES[0];return {...c,hp:c.hp+s.upgrades.vitality*12+(s.equipped.armor?.power||0)*4,damage:(c.damage+(s.equipped.weapon?.power||0)*1.5)*(1+s.upgrades.power*.06)*(1+s.ascensions*.1),rate:c.rate/(1+s.upgrades.haste*.02),speed:c.speed*(1+s.upgrades.haste*.02),crit:Math.min(.65,.08+(s.equipped.charm?.power||0)*.002),magnet:100};}
-export function rollLoot(wave,region,fortune=0,rng=Math.random){
- const r=rng()+fortune*.014;const rarity=r> .992?4:r>.94?3:r>.77?2:r>.45?1:0;
- const slot=SLOTS[Math.min(2,Math.floor(rng()*3))];
- const power=Math.round((4+wave*1.3)*(1+rarity*.7)*(1+region*.5)*(0.85+rng()*.3));
- const names={weapon:['Iron Edge','Briarblade','Moonpiercer','Void Cleaver','Dawnbreaker'],armor:['Worn Mantle','Mossguard','Silverweave','Dusk Aegis','Sunforged Plate'],charm:['Old Sigil','Forest Heart','Starshard','Eclipse Eye','Eternal Ember']};
- return {id:Date.now().toString(36)+rng().toString(36).slice(2,9),slot,rarity,power,name:names[slot][rarity]};
-}
-export function salvageValue(item){return Math.max(1,Math.floor(item.power*(item.rarity+1)/3));}
-export function buyUpgrade(s,id){const u=UPGRADES.find(x=>x.id===id);if(!u)return false;const l=s.upgrades[id],cost=upgradeCost(l);if(s.gold<cost||l>=(id==='fortune'?10:id==='haste'?20:1000))return false;s.gold-=cost;s.upgrades[id]++;return true;}
-export function ascend(s){if(s.bestWave<15+s.ascensions*5)return false;s.ascensions++;s.embers+=1;s.gold=0;s.upgrades={power:0,vitality:0,fortune:0,haste:0};return true;}
+export function currentQuest(s){return QUESTS[s.classId][s.completed.length]||null;}
+export function questProgress(s,q=currentQuest(s)){return q?Math.min(q.target,s.metrics[q.metric]||0):0;}
+export function questReady(s){const q=currentQuest(s);return !!q&&questProgress(s,q)>=q.target;}
+export function record(s,metric,amount=1){s.metrics[metric]=cap((s.metrics[metric]||0)+Math.max(0,amount));}
+export function xpNeeded(s){return Math.floor(55+Math.pow(s.level,1.45)*28);}
+export function gainXP(s,amount){s.xp+=Math.max(0,amount);let levels=0;while(s.level<100&&s.xp>=xpNeeded(s)){s.xp-=xpNeeded(s);s.level++;levels++;}if(s.level===100)s.xp=Math.min(s.xp,xpNeeded(s));return levels;}
+export function claimQuest(s){const q=currentQuest(s);if(!q||!questReady(s))return null;s.completed.push(q.id);s.gold+=q.reward;gainXP(s,50+s.completed.length*24);if(q.weapon!==null){const id=WEAPONS[s.classId][q.weapon].id;if(!s.unlocked.includes(id))s.unlocked.push(id);s.equipped=id;}return q;}
+export function equipWeapon(s,id){if(!s.unlocked.includes(id)||!WEAPONS[s.classId].some(w=>w.id===id))return false;s.equipped=id;return true;}
+export function skillUnlocked(s,key){if(key==='Q')return true;return QUESTS[s.classId].some(q=>q.skill===key&&s.completed.includes(q.id));}
+export function stats(s){const c=CLASSES.find(c=>c.id===s.classId),weapon=WEAPONS[s.classId].find(w=>w.id===s.equipped)||WEAPONS[s.classId][0];return {...c,maxHp:c.hp+(s.level-1)*15,damage:c.damage*weapon.power*(1+(s.level-1)*.1),weapon,skills:SKILLS[s.classId]};}
+export function collectObject(s,id){const o=OBJECTS.find(o=>o.id===id);if(!o||!o.metric||s.collected.includes(id)||(o.classId&&o.classId!==s.classId))return false;s.collected.push(id);record(s,o.metric);gainXP(s,12);return true;}
+export function recordKill(s,type,bossId=null){s.kills++;record(s,type+'Kills');if(bossId){s.bosses[bossId]=(s.bosses[bossId]||0)+1;record(s,bossId);}}
+export function respawn(s){s.deaths++;const lost=Math.floor(s.gold*.1);s.gold-=lost;s.position={x:0,z:18};return lost;}
+export function attackInCone(player,target,angle,range,halfAngle=1.1){const dx=target.x-player.x,dz=target.z-player.z;if(Math.hypot(dx,dz)>range+(target.radius||0))return false;const delta=Math.atan2(Math.sin(Math.atan2(dx,dz)-angle),Math.cos(Math.atan2(dx,dz)-angle));return Math.abs(delta)<halfAngle;}

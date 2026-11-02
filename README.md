@@ -1,71 +1,99 @@
-# Emberfall — The Last Light
+# Emberfall: The Open Wilds
 
-An offline, single-player fantasy action RPG for Windows 10/11 (64-bit). Built for short expeditions and long-term character growth, with original procedural artwork, animated combat, and synthesized audio. No accounts, purchases, or online services.
+A fresh, third-person **3D open-world fantasy RPG** for Windows 10/11 x64. This first playable 3D version replaces the arena/expedition format with a continuous, explorable landscape, permanent character progression, class-specific questlines, earned weapons, and world bosses.
 
-## Play
+[Download the latest Windows release](https://github.com/Skysverse/GRINDING-GAME/releases/latest).
 
-Download **Emberfall-1.1.0-Windows.exe** from [GitHub Releases](https://github.com/Skysverse/GRINDING-GAME/releases/latest). Double-click it; no installer or administrator access is needed. Allow a few seconds for the portable launcher to unpack. The executable is unsigned.
+## Choose your calling
 
-Choose **Warden**, **Arcanist**, or **Ranger**, then begin an expedition. Aim with the mouse and click for each attack, or press J. There is no automatic attack or held autofire. The Warden fights at close range; ranged classes can kite enemies.
+Choose a class when creating a character. That choice stays with the character; create a new character to try a different path.
 
-| Control | Action |
+| Class | Questline | Weapons | Abilities |
+| --- | --- | --- | --- |
+| Warrior | The Iron Oath: quarrying, stoneborn hunts, beacon defense, and guardian challenges | Wayfarer’s Sword → Ironbark Longsword → Stonewarden’s Edge → Dawnbringer | Sword cleaves, Sundering strike, Iron Aegis, Kingbreaker |
+| Mage | The Starbound Path: moonflowers, seer hunts, the ruined library, and astral rituals | Apprentice’s Staff → Moonwell Staff → Staff of the First Star → Astral Sovereign | Arcane bolts, Starburst, Riftstep, Astral Convergence |
+| Ranger | The Verdant Way: gathering, wolf hunts, a scout escort, and guardian hunts | Ashwood Bow → Briarstring → Warden’s Whisper → Evergreen Requiem | Aimed arrows, Thorn volley, Windwalk, Arrowstorm |
+
+Each class has eight one-time chapters, for 24 class-specific quest entries. Speak to your class mentor under the Hearthglen banners to learn your objective and claim rewards. Chapters 2, 4, and 8 award weapons; chapter 3 unlocks R, and chapter 6 unlocks F. Q is available from the beginning. Equip earned weapons in the Gear menu.
+
+## An open world
+
+Walk between Hearthglen village, Whisperwood, Cinderstone Ruins, and the Astral Reach without loading screens or wave timers. Roads connect the regions, with a lake, forest camps, landmarks, quest objects, and guardian circles along the way. The map shows your class destination and supports personal waypoints.
+
+Three world bosses wait at challenge stones: **Thornhelm, the Stonewarden**, **Ignar, the Ash King**, and **Vael, the Starless**. Hold E at a stone to challenge its boss. Watch for projectile rings, ground warnings, and telegraphed charges. Leaving the arena resets a guardian. You can challenge defeated bosses again for experience and gold; chapter rewards remain one-time. Ordinary camp enemies return after roughly 100 seconds.
+
+Death returns you to Hearthglen and costs 10% of your gold. Class, experience, weapons, and story progress remain. Rest at the village shrine to heal and refill flasks. Character experience and levels persist between sessions.
+
+## Controls
+
+| Input | Action |
 | --- | --- |
-| WASD / Arrow keys | Move |
-| Space | Dash; briefly become invulnerable |
-| Left click / J | One aimed basic attack per click / keypress |
-| Q / R / F | Cast an unlocked class move |
-| Hold X | Gather, speak, investigate, or perform a ritual |
-| E | Drink a healing potion |
-| Escape | Pause / resume |
-| F11 | Fullscreen in the desktop app |
+| WASD / arrows | Move relative to the camera |
+| Right mouse drag | Orbit the camera |
+| Mouse wheel | Zoom camera |
+| Left click | Aim at the ground cursor and attack once |
+| J | Attack in the direction the character faces |
+| Space | Jump |
+| Shift | Dodge with brief invulnerability |
+| Q / R / F | Use an available class move |
+| T | Healing flask |
+| E | Speak to mentor / rest at shrine |
+| Hold E | Gather, inspect, perform rituals, or challenge a boss |
+| Tab | Class quest journal |
+| I | Weapons and moves |
+| M | World map and waypoints |
+| Escape | Pause / close menu |
+| F11 | Fullscreen in the Windows app |
 
-Collect experience motes and pick stackable blessings: astral attack echoes, chain lightning, burning strikes, lifesteal, extra projectiles, regeneration, and more. Defeat enough enemies and survive 25 seconds to advance a normal wave. Every fifth wave features a boss with projectile rings, marked ground blasts, and a telegraphed charge. A boss wave ends when the boss falls. Waves continue indefinitely and grow harder.
+Basic attacks require a click or keypress; holding an attack input does not keep firing. A Warrior must get close, while Mage and Ranger use projectiles. Menus pause combat.
 
-Gold and loot are retained when you fall or return to camp. Between runs:
+## Saves and the reset
 
-- Equip weapons, armor, and charms with five rarity levels.
-- Salvage spare gear into shards; enhance equipped items.
-- Invest gold into permanent sanctuary upgrades.
-- Complete 26 unique, one-time quests with characters and linked chapters: gathering, escorting, exploration, beacon defense, rituals, crafting, equipment, hunts, class mastery, and boss challenges. Claimed quests remain completed and never reset.
-- Earn permanent class moves: Q at 12 class defeats, R at 60, and F at 180 plus 3 class bosses. View each class’s progress and move descriptions in the Moves tab.
-- Unlock Cinderstone Ruins at completed wave 5 and Astral Hollow at completed wave 10. Harder regions reward stronger loot.
-- Ascend at best wave 15, then 20, 25, and so on. Each ascension adds 10% permanent damage, resetting gold and sanctuary ranks while retaining gear, shards, quests, and region unlocks.
+Version 2.0 is a new game design and starts with a new character selection. It uses the local-storage key `emberfall-open-world-v1`, separate from the old 2D game's `emberfall-save-v1`. Older releases and saves remain available; they are not converted into 3D characters or erased.
 
-## Saves
+Open Wilds progress saves locally in Electron’s `%APPDATA%\Emberfall` user-data directory. Your class, location, experience, quest progress, gathered objects, boss victories, and weapons persist. Health and flasks refresh when reopening. The Pause menu can export or import an Open Wilds save. Export a backup before replacing a character or moving computers. New Character asks before replacing your current character.
 
-Progress saves automatically to the Electron user-data directory (`%APPDATA%\Emberfall` on Windows), not beside the portable executable. Use **Export save** to back up or transfer your adventure. **Import save** validates the file and asks before replacing your current progress. Expedition-only blessings and current run positions do not persist after closing; earned gold, loot, class mastery, learned moves, world objectives, and completed quests do. Version 1.0 saves migrate automatically, retaining wealth, gear, upgrades, and combat mastery in your last selected class. Previous repeating counters are retired; the new story journal starts fresh.
+## Scope and requirements
 
-## Develop
+This is a playable foundation with original stylized low-poly art, procedural terrain, animated characters, a finite connected world approximately 460 units across, three classes, 24 quest entries, 12 class weapons, and three bosses. It is not a large commercial RPG: there are no building interiors, multiplayer, voiced dialogue, or an unlimited quest generator.
 
-Node.js 22+ and npm are recommended. Use the existing checkout; no additional worktree is needed.
+The game runs offline. A working **WebGL 2 graphics driver** is required; hardware acceleration is recommended. The portable `.exe` does not require installation or administrator privileges, but needs a few seconds to unpack. It is unsigned. Native Windows gameplay still needs manual verification; automated build and gameplay checks are described below.
+
+## Development
+
+Use the existing checkout; no extra worktree is needed. Node.js 24 and npm are recommended.
 
 ```sh
 npm ci
 npm start
 ```
 
-For browser development, run `npm run dev` and open the local server on port 5173. The game uses native canvas and JavaScript modules; no frontend bundler is required. All assets are local and no network requests are needed by the game.
+`npm ci` prepares local Three.js module files through the postinstall script. All runtime assets are included in the game; there are no CDN requests. To run in a browser:
 
 ```sh
-npm test             # progression, economy, loot, save validation
-npm run test:ui      # integration tests using /usr/bin/chromium and Python 3
-npm run dist:win     # Windows x64 portable executable in dist/
+npm run dev
 ```
 
-The UI test exercises manual aiming, the absence of idle/held attacks, class move gates and all nine abilities, world interactions, escorting, defense, rituals, one-time quest claims, save reload, and compact layouts. Screenshots are written to ignored `test-results/`. A test-only simulation hook is enabled exclusively with the `?test=1` URL query; normal desktop launches do not enable it.
+The development server listens on port 5173. Add `?low=1` for software WebGL testing without shadow maps. Development test hooks are enabled exclusively with `?test=1`; the desktop game does not enable them.
 
-Cross-building the portable Windows executable works on Linux with electron-builder's official Electron, 7-Zip, and NSIS downloads. The build intentionally disables Windows executable resource editing/code signing so Wine and signing credentials are not required. Run the Windows artifact on a Windows machine for platform-specific verification; Linux browser checks do not establish native Windows compatibility.
+```sh
+npm test          # class progression, weapons, quests, saves, world data, combat rules
+npm run test:ui  # real WebGL 2 browser gameplay; needs Python 3 and /usr/bin/chromium
+npm run dist:win # portable Windows executable in dist/
+```
 
-## Project layout
+The browser suite exercises class selection, world movement/jumping/dodging, camera orbit/zoom, deliberate melee and ranged attacks, gathering, quest claims, earned weapons, journal/map/gear menus, save reload, boss activation and attack patterns, class skills, escort/defense objectives, and death/respawn. Software WebGL checks do not establish performance on every graphics card.
 
-- `src/core.js`: persistent progression, loot generation, validated saves, economy.
-- `src/game.js`: simulation, controls, canvas rendering, UI and synthesized sound.
-- `src/style.css`: responsive desktop interface.
-- `electron.cjs`: sandboxed desktop window with no renderer Node.js access.
-- `tests/`: economy and browser integration tests.
+The Windows release workflow runs on a version tag matching `package.json`. It installs locked dependencies, runs progression tests, builds the portable executable, and publishes the `.exe` plus SHA-256 checksum using GitHub’s built-in job token.
 
-Source code and original art are MIT licensed. Bundled Electron/Chromium components retain their respective notices inside the packaged app.
+## Source
 
-## Publish a release
+- `src/data.js`: classes, class-specific quests/weapons, boss/camp data, and terrain functions.
+- `src/core.js`: persistent character progression, save validation, and combat rules.
+- `src/world.js`: 3D terrain, instanced vegetation, village, ruins, landmarks, and lighting.
+- `src/models.js`: original animated low-poly characters and props.
+- `src/engine.js`: third-person camera, traversal, manual combat, bosses, and world interactions.
+- `src/game.js`: class selection, mentor dialogue, journal, equipment, map, saves, and HUD.
+- `scripts/vendor.cjs`: copies the pinned Three.js runtime and its license into packaged assets.
 
-Pushing a version tag such as `v1.1.0` starts the Windows release workflow. GitHub Actions installs locked dependencies, runs progression tests, builds the executable on Windows, and publishes the portable `.exe` and SHA-256 checksum as release assets. The workflow uses GitHub’s built-in job token with repository contents permission; no personal access token is needed. The tag must match `package.json`.
+Original source and art are MIT licensed. Three.js, Electron, and Chromium retain their respective notices.
